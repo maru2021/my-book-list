@@ -7,8 +7,18 @@
     <style>
         body { font-family: sans-serif; background: #f9f9f9; padding: 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-        .card img { width: 100%; height: auto; border-radius: 5px; }
+        .card { background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 300px; /* カードが横に広がりすぎないように固定 */
+    margin: 0 auto;   /* 中央に寄せる */ }
+        .card img { width: 100%;       /* 横幅をカードいっぱいに広げる */
+    max-width: 200px;  /* でも、大きすぎないように上限を決める（お好みで調整） */
+    height: auto;      /* 高さは横幅に合わせて自動調整（これで歪まない） */
+    object-fit: contain; /* 画像が切れないように枠内に収める */
+    margin-bottom: 10px; }
         .btn { display: block; background: #ff9900; color: white; padding: 10px; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
