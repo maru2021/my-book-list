@@ -7,27 +7,32 @@
     <style>
         body { font-family: "Helvetica Neue", Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; color: #333; }
         .site-header { background: #fff; text-align: center; padding: 40px 20px; border-bottom: 1px solid #ddd; margin-bottom: 30px; }
-        .site-header img { max-width: 120px; border-radius: 50%; margin-bottom: 15px; }
-        .site-header h1 { margin: 0; font-size: 28px; color: #222; }
-        .site-header p { color: #666; margin-top: 10px; }
+        .site-header img { max-width: 100px; border-radius: 50%; margin-bottom: 15px; }
+        .site-header h1 { margin: 0; font-size: 26px; color: #222; }
+        .site-header p { color: #666; margin-top: 8px; font-size: 15px; }
+        
+        /* 粋な広告明示（ヘッダー用） */
+        .ad-disclosure { font-size: 11px; color: #aaa; margin-top: 15px; font-style: italic; }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding-bottom: 50px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; padding-bottom: 50px; }
         
-        .card { background: white; border-radius: 12px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; padding: 20px; }
-        .post-date { position: absolute; top: 10px; right: 15px; font-size: 11px; color: #999; }
+        .card { background: white; border-radius: 12px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; padding: 20px; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); } /* 少し浮き上がる粋な演出 */
         
-        .card img { width: 100%; height: 200px; object-fit: contain; background: #f9f9f9; margin-bottom: 15px; }
-        .card h3 { font-size: 17px; margin: 5px 0 5px 0; min-height: 2.8em; line-height: 1.4; color: #111; } /* ここを少し調整 */
+        .post-date { position: absolute; top: 10px; right: 15px; font-size: 10px; color: #bbb; }
+        .card img { width: 100%; height: 180px; object-fit: contain; background: #f9f9f9; margin-bottom: 15px; }
+        .card h3 { font-size: 16px; margin: 5px 0 5px 0; min-height: 2.8em; line-height: 1.4; color: #111; }
         
-        /* 星評価のスタイル */
-        .rating { font-size: 18px; color: #ffc107; margin-bottom: 10px; display: block; } /* 星の色とサイズ */
-        .rating span { color: #ccc; } /* 半分の星の背景色など */
-
-        .comment { font-size: 14px; color: #555; text-align: left; line-height: 1.6; margin-bottom: 15px; flex-grow: 1; white-space: pre-wrap; }
-        .badge { color: #c40000; font-weight: bold; font-size: 12px; margin-bottom: 10px; display: block; }
-        .btn { background: #ff9900; color: white; text-decoration: none; padding: 12px; border-radius: 6px; font-weight: bold; transition: 0.2s; text-align: center; }
+        .rating { font-size: 16px; color: #ffc107; margin-bottom: 8px; }
+        .badge { color: #c40000; font-weight: bold; font-size: 12px; margin-bottom: 12px; display: block; }
+        .comment { font-size: 14px; color: #555; text-align: left; line-height: 1.6; margin-bottom: 20px; flex-grow: 1; white-space: pre-wrap; }
+        
+        .btn { background: #ff9900; color: white; text-decoration: none; padding: 12px; border-radius: 6px; font-weight: bold; transition: 0.2s; text-align: center; font-size: 14px; }
         .btn:hover { background: #e68a00; }
+        
+        /* ボタンの下の補足 */
+        .btn-note { font-size: 10px; color: #bbb; text-align: center; margin-top: 8px; }
 
         @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
     </style>
@@ -38,6 +43,7 @@
         <img src="logo.png" alt="ロゴ">
         <h1>厳選おすすめ本カタログ</h1>
         <p>Kindle Unlimitedで読める良書を紹介</p>
+        <div class="ad-disclosure">※本サイトはAmazonアソシエイト・プログラムに参加しています</div>
     </header>
 
     <div class="container">
@@ -45,44 +51,35 @@
     </div>
 
     <script>
-        // ここをご自身のURLに書き換えてください
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5ymaarqn9uS9u-UwrEYrQupWrgQdYG13Iqom8ZvKMzkITaXo3GvDPReNPBe2yCfOyho7iw3jb3NIZ/pub?gid=0&single=true&output=csv';
 
-        // 星を表示する関数
-        // 星と数字を表示する関数（端数対応版）
         function getStars(rating) {
             if (!rating) return ''; 
             let stars = '';
-            const fullStars = Math.floor(rating); // 満点の星の数
-            const hasHalfStar = rating % 1 !== 0; // 端数があるか
-
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
             for (let i = 1; i <= 5; i++) {
                 if (i <= fullStars) {
-                    stars += '&#9733;'; // 塗りつぶしの星
+                    stars += '&#9733;';
                 } else if (hasHalfStar && i === fullStars + 1) {
-                    // 半分を表現するために、特殊な絵文字か色分けを使用
-                    // ここではシンプルに「半分星」の文字を使用します
                     stars += '<span style="position:relative;display:inline-block;">&#9734;<span style="position:absolute;left:0;top:0;width:50%;overflow:hidden;color:#ffc107;">&#9733;</span></span>';
                 } else {
-                    stars += '&#9734;'; // 空の星
+                    stars += '&#9734;';
                 }
             }
-            // 星の横に数字を追加
-            return `<div class="rating">${stars} <span style="font-size:14px; color:#666; font-weight:normal;">(${rating})</span></div>`;
+            return `<div class="rating">${stars} <span style="font-size:12px; color:#999; font-weight:normal;">(${rating})</span></div>`;
         }
 
         async function loadBooks() {
             try {
                 const response = await fetch(csvUrl);
                 const data = await response.text();
-                
                 const rows = data.replace(/\r/g, '').split('\n').filter(row => row.trim() !== '').slice(1).reverse();
                 const grid = document.getElementById('book-grid');
                 grid.innerHTML = '';
 
                 rows.forEach(row => {
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    
                     if (cols.length >= 4) {
                         const title = (cols[0] || "").replace(/"/g, "");
                         const imageUrl = (cols[1] || "").replace(/"/g, "");
@@ -93,13 +90,14 @@
 
                         grid.innerHTML += `
                             <div class="card">
-                                <div class="post-date">最終確認日：${date}</div>
+                                <div class="post-date">最終確認：${date}</div>
                                 <img src="${imageUrl}" alt="${title}">
                                 <h3>${title}</h3>
                                 ${getStars(rating)} 
                                 <span class="badge">Kindle Unlimited 0円</span>
                                 <div class="comment">${comment}</div>
                                 <a href="${amazonUrl}" target="_blank" class="btn">Amazonで詳細を見る</a>
+                                <div class="btn-note">※Amazonのアソシエイトとして適格販売により収入を得ています</div>
                             </div>
                         `;
                     }
