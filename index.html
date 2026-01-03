@@ -3,27 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>おすすめ本カタログ</title>
+    <title>マイ本棚</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+        body { font-family: sans-serif; background: #f9f9f9; padding: 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-        .card img { max-width: 100%; height: auto; border-radius: 4px; }
-        .card h3 { font-size: 16px; margin: 10px 0; height: 3em; overflow: hidden; }
-        .date { font-size: 12px; color: #888; margin-bottom: 10px; }
-        .btn { display: block; background: #ff9900; color: white; text-decoration: none; padding: 10px; border-radius: 5px; font-weight: bold; }
-        .btn:hover { background: #e68a00; }
+        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .card img { width: 100%; height: auto; border-radius: 5px; }
+        .btn { display: block; background: #ff9900; color: white; padding: 10px; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="date">最終確認日: 2026年1月3日</div>
-    <div class="grid">
-        <div class="card">
-            <img src="https://m.media-amazon.com/images/I/71KM1N1AgJL._SY466_.jpg" alt="本の表紙">
-            <h3>上手な愛し方 [新版] (リチャード・テンプラーのRulesシリーズ)</h3>
-            <p style="color:red; font-size:12px;">Kindle Unlimited 0円</p>
-            <a href="https://amzn.to/4pq513r" target="_blank" class="btn">Amazonで詳細を見る</a>
-        </div>
-        </div>
+    <div id="book-grid" class="grid">読み込み中...</div>
+
+    <script>
+        // 先ほどコピーしたGoogleスプレッドシートのCSV公開URLをここに貼る
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5ymaarqn9uS9u-UwrEYrQupWrgQdYG13Iqom8ZvKMzkITaXo3GvDPReNPBe2yCfOyho7iw3jb3NIZ/pub?gid=0&single=true&output=csv';
+
+        async function loadBooks() {
+            const response = await fetch(csvUrl);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1); // ヘッダーを除去
+            const grid = document.getElementById('book-grid');
+            grid.innerHTML = '';
+
+            rows.forEach(row => {
+                const [title, imageUrl, amazonUrl] = row.split(',');
+                if (title) {
+                    grid.innerHTML += `
+                        <div class="card">
+                            <img src="${imageUrl}" alt="${title}">
+                            <h3>${title}</h3>
+                            <a href="${amazonUrl}" target="_blank" class="btn">Amazonで見る</a>
+                        </div>
+                    `;
+                }
+            });
+        }
+        loadBooks();
+    </script>
 </body>
 </html>
