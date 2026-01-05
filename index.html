@@ -21,7 +21,7 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; padding-bottom: 50px; }
         
-        .card { background: white; border-radius: 12px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; padding: 20px; transition: transform 0.2s; }
+        .card { background: white; border-radius: 12px; position: relative !important; overflow: visible !important; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; padding: 20px; transition: transform 0.2s; }
         .card:hover { transform: translateY(-5px); }
         
         .post-date { position: absolute; top: 10px; right: 15px; font-size: 10px; color: #bbb; }
@@ -36,6 +36,30 @@
         .btn:hover { background: #e68a00; }
 
         @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+
+        /* 「サクッと読める！」バッジの装飾 */
+        .quick-read-badge {
+            position: absolute !important;
+            top: -20px !important;
+            left: -20px !important;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(#ff6b6b, #ee5253);
+            color: white !important;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.1;
+            z-index: 999;
+            box-shadow: 4px 4px 15px rgba(0,0,0,0.3);
+            transform: rotate(-15deg);
+            border: 2px solid white;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -58,7 +82,7 @@
 
     <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5ymaarqn9uS9u-UwrEYrQupWrgQdYG13Iqom8ZvKMzkITaXo3GvDPReNPBe2yCfOyho7iw3jb3NIZ/pub?gid=0&single=true&output=csv';
-        let allBooks = []; // 取得したデータを保持する変数
+        let allBooks = [];
 
         function getStars(rating) {
             if (!rating) return ''; 
@@ -77,12 +101,9 @@
             return `<div class="rating">${stars} <span style="font-size:12px; color:#999; font-weight:normal;">(${rating})</span></div>`;
         }
 
-        // 表示を切り替える関数
         function switchTab(showUnlimited, btnElement) {
-            // ボタンの活性状態を切り替え
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
-
             renderBooks(showUnlimited);
         }
 
@@ -91,7 +112,7 @@
                 const response = await fetch(csvUrl);
                 const data = await response.text();
                 allBooks = data.replace(/\r/g, '').split('\n').filter(row => row.trim() !== '').slice(1).reverse();
-                renderBooks(true); // 初期表示はUnlimited対象（TRUE）
+                renderBooks(true);
             } catch (e) {
                 console.error("読み込みエラー", e);
             }
@@ -102,32 +123,35 @@
             grid.innerHTML = '';
 
             allBooks.forEach(row => {
-                // カンマ区切りで分割
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                
-                // 【重要】タイトル（A列：cols[0]）が空っぽなら、その行は完全に無視する
-                const title = (cols[0] || "").replace(/"/g, "").trim();
-                if (!title || title === "title") return; 
+                const rawTitle = (cols[0] || "").replace(/"/g, "").trim();
+                if (!rawTitle || rawTitle === "title") return; 
 
-                // G列（インデックス6）のチェック判定
                 let checkVal = cols[6] ? cols[6].replace(/"/g, "").trim().toUpperCase() : "FALSE";
                 const isUnlimited = (checkVal === "TRUE");
 
-                // 現在のタブと一致する場合のみ表示
                 if (isUnlimited === targetStatus) {
                     const imageUrl = (cols[1] || "").replace(/"/g, "").trim();
                     const amazonUrl = (cols[2] || "").replace(/"/g, "").trim();
                     const comment = (cols[3] || "").replace(/"/g, "").trim();
                     const date = (cols[4] || "").replace(/"/g, "").trim() || "未設定";
                     const rating = parseFloat(cols[5]) || 0; 
-
                     const badgeHtml = isUnlimited ? '<span class="badge">Kindle Unlimited 0円</span>' : '';
+
+                    // A列にタグが含まれている場合はそのまま出し、タグを除いた部分はh3で囲む
+                    let displayTitle = rawTitle;
+                    if(rawTitle.includes('quick-read-badge')) {
+                        // タグ付きの場合、タグを分離してタイトル本体をh3にする
+                        displayTitle = rawTitle.replace('</div>', '</div><h3>') + '</h3>';
+                    } else {
+                        displayTitle = `<h3>${rawTitle}</h3>`;
+                    }
 
                     grid.innerHTML += `
                         <div class="card">
                             <div class="post-date">最終確認：${date}</div>
-                            <img src="${imageUrl}" alt="${title}">
-                            <h3>${title}</h3>
+                            <img src="${imageUrl}" alt="">
+                            ${displayTitle}
                             ${getStars(rating)} 
                             ${badgeHtml}
                             <div class="comment">${comment}</div>
@@ -141,33 +165,3 @@
     </script>
 </body>
 </html>
-
-/* カード全体の親要素に必ずこれを入れる */
-.card, .card-item { 
-  position: relative !important; 
-  overflow: visible !important; 
-}
-
-/* 「サクッと読める！」バッジの装飾 */
-.quick-read-badge {
-  position: absolute;
-  top: -20px;    /* 上にさらにはみ出し */
-  left: -20px;   /* 左にさらにはみ出し */
-  width: 80px;   /* 少し大きくしました */
-  height: 80px;
-  background: radial-gradient(#ff6b6b, #ee5253); /* 綺麗な赤のグラデ */
-  color: white !important;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 900;
-  text-align: center;
-  line-height: 1.1;
-  z-index: 999; /* 一番手前に表示 */
-  box-shadow: 4px 4px 15px rgba(0,0,0,0.3);
-  transform: rotate(-15deg);
-  border: 2px solid white; /* 白い縁取りでさらに目立たせる */
-  pointer-events: none;
-}
