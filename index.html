@@ -37,11 +37,11 @@
 
         @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
 
-       /* 左上：サクッと読める！（赤） */
+      /* 【赤丸】位置は変えず、少しだけサイズ調整してスッキリさせる */
 .quick-read-badge {
     position: absolute !important;
     top: -15px !important;
-    left: -15px !important; /* 左端ギリギリに */
+    left: -15px !important; /* 左上にはみ出したまま */
     width: 62px;
     height: 62px;
     background: radial-gradient(#ff6b6b, #ee5253) !important;
@@ -61,37 +61,42 @@
     pointer-events: none;
 }
 
-/* 右上：超おすすめ！（金＋王冠） */
+/* 【王冠】画像の上に移動させる設定 */
 .mega-recommend-badge {
     position: absolute !important;
-    top: -18px !important;
-    right: -15px !important; /* 右端ギリギリに寄せて重なりを回避 */
-    width: 68px;
-    height: 68px;
-    background: radial-gradient(#ffe066, #f39c12) !important;
-    color: #fff !important;
-    border-radius: 50% !important;
+    top: 55px !important;    /* ★ここが重要！カードの上から55px下げて画像の位置に */
+    right: 15px !important;  /* ★右端に寄せる */
+    width: 75px;
+    height: 65px;
     display: flex !important;
-    flex-direction: column; /* 王冠と文字を縦に並べる */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
-    font-weight: 900;
-    text-align: center;
-    line-height: 1.1;
-    z-index: 101;
-    box-shadow: -3px 3px 8px rgba(0,0,0,0.2);
-    transform: rotate(10deg);
-    border: 2px solid white;
+    z-index: 10;             /* 画像のすぐ上に載せる */
+    transform: rotate(8deg); 
     pointer-events: none;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    filter: drop-shadow(2px 3px 5px rgba(0,0,0,0.4)); /* 画像の上で見やすいよう影を強めに */
 }
 
-/* 王冠部分の調整 */
+/* 王冠アイコン（絵文字）のサイズ */
 .crown-icon {
-    font-size: 18px;
-    margin-bottom: -2px;
+    font-size: 45px; 
+    line-height: 1;
+    position: relative;
     display: block;
+}
+
+/* 王冠の中の「超おすすめ！」文字 */
+.mega-recommend-badge span:last-child {
+    position: absolute;
+    top: 30px;        /* 王冠の胴体部分に重なる位置 */
+    color: #4a3900;   /* 濃い茶色で見やすく */
+    font-size: 8px;
+    font-weight: 900;
+    width: 100%;
+    text-align: center;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
 }
     </style>
 </head>
