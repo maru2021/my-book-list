@@ -60,6 +60,30 @@
             border: 2px solid white;
             pointer-events: none;
         }
+        /* 「めっちゃおすすめ！」バッジ（右上配置） */
+.mega-recommend-badge {
+    position: absolute !important;
+    top: -15px !important;  /* 上にはみ出し */
+    right: -15px !important; /* 右にはみ出し（赤丸と被らないように右側） */
+    width: 75px;
+    height: 75px;
+    background: radial-gradient(#ffcc00, #f39c12) !important; /* 金色グラデ */
+    color: #fff !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 900;
+    text-align: center;
+    line-height: 1.1;
+    z-index: 101; /* 赤丸(100)より少し手前に */
+    box-shadow: -4px 4px 10px rgba(0,0,0,0.2);
+    transform: rotate(10deg); /* 逆向きに少し傾ける */
+    border: 2px solid white;
+    pointer-events: none;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
     </style>
 </head>
 <body>
