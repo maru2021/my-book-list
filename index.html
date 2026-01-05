@@ -64,18 +64,21 @@
 /* 【王冠】画像の上に移動させる設定 */
 .mega-recommend-badge {
     position: absolute !important;
-    top: 55px !important;    /* ★ここが重要！カードの上から55px下げて画像の位置に */
-    right: 15px !important;  /* ★右端に寄せる */
-    width: 75px;
-    height: 65px;
+    top: 55px !important;    /* 縦の位置：本の画像の上あたり */
+    left: 50% !important;   /* 横の位置：一旦真ん中に持ってくる */
+    transform: translateX(-50%) rotate(0deg) !important; /* ★自分の幅の半分戻して「ど真ん中」＆「まっすぐ」に！ */
+    right: auto !important; 
+
+    /* デザイン設定 */
+    width: 80px;
+    height: 70px;
     display: flex !important;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 10;             /* 画像のすぐ上に載せる */
-    transform: rotate(8deg); 
+    z-index: 10;
     pointer-events: none;
-    filter: drop-shadow(2px 3px 5px rgba(0,0,0,0.4)); /* 画像の上で見やすいよう影を強めに */
+    filter: drop-shadow(2px 3px 6px rgba(0,0,0,0.4));
 }
 
 /* 王冠アイコン（絵文字）のサイズ */
