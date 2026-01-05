@@ -103,9 +103,14 @@
 
             allBooks.forEach(row => {
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                const isUnlimited = cols[6] ? cols[6].replace(/"/g, "").trim().toUpperCase() === "TRUE" : false;
+                
+                // G列（インデックス6）を取得し、徹底的にクリーンアップして判定
+                let checkVal = cols[6] ? cols[6].replace(/"/g, "").trim().toUpperCase() : "FALSE";
+                const isUnlimited = (checkVal === "TRUE");
 
-                // 表示したいタブの状態と一致する場合のみ表示
+                // デバッグ用：もし動かない場合はブラウザのコンソール（F12）でこれを確認
+                // console.log("判定結果:", isUnlimited, "元の値:", checkVal);
+
                 if (isUnlimited === targetStatus && cols.length >= 4) {
                     const title = (cols[0] || "").replace(/"/g, "");
                     const imageUrl = (cols[1] || "").replace(/"/g, "");
@@ -114,7 +119,6 @@
                     const date = cols[4] ? cols[4].replace(/"/g, "") : "未設定";
                     const rating = parseFloat(cols[5]) || 0; 
 
-                    // バッジの表示切り替え
                     const badgeHtml = isUnlimited ? '<span class="badge">Kindle Unlimited 0円</span>' : '';
 
                     grid.innerHTML += `
@@ -131,7 +135,6 @@
                 }
             });
         }
-
         loadBooks();
     </script>
 </body>
