@@ -141,3 +141,33 @@
     </script>
 </body>
 </html>
+
+/* カード全体の親要素に必ずこれを入れる */
+.card, .card-item { 
+  position: relative !important; 
+  overflow: visible !important; 
+}
+
+/* 「サクッと読める！」バッジの装飾 */
+.quick-read-badge {
+  position: absolute;
+  top: -20px;    /* 上にさらにはみ出し */
+  left: -20px;   /* 左にさらにはみ出し */
+  width: 80px;   /* 少し大きくしました */
+  height: 80px;
+  background: radial-gradient(#ff6b6b, #ee5253); /* 綺麗な赤のグラデ */
+  color: white !important;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.1;
+  z-index: 999; /* 一番手前に表示 */
+  box-shadow: 4px 4px 15px rgba(0,0,0,0.3);
+  transform: rotate(-15deg);
+  border: 2px solid white; /* 白い縁取りでさらに目立たせる */
+  pointer-events: none;
+}
