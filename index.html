@@ -163,13 +163,15 @@
                     const badgeHtml = isUnlimited ? '<span class="badge">Kindle Unlimited 0円</span>' : '';
 
                     // A列にタグが含まれている場合はそのまま出し、タグを除いた部分はh3で囲む
-                    let displayTitle = rawTitle;
-                    if(rawTitle.includes('quick-read-badge')) {
-                        // タグ付きの場合、タグを分離してタイトル本体をh3にする
-                        displayTitle = rawTitle.replace('</div>', '</div><h3>') + '</h3>';
-                    } else {
-                        displayTitle = `<h3>${rawTitle}</h3>`;
-                    }
+                    // タイトル処理の部分をこれに差し替え
+let displayTitle = `<h3>${rawTitle}</h3>`;
+// 赤丸バッジと金丸バッジの両方をHTMLとしてそのまま通す
+if (rawTitle.includes('badge')) {
+    displayTitle = rawTitle.replace(/<\/div>/g, '</div>###').split('###');
+    let badges = displayTitle.filter(t => t.includes('badge')).join('');
+    let cleanTitle = displayTitle.filter(t => !t.includes('badge')).join('').replace(/<\/?[^>]+(>|$)/g, "");
+    displayTitle = `${badges}<h3>${cleanTitle}</h3>`;
+}
 
                     grid.innerHTML += `
                         <div class="card">
