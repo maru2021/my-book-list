@@ -71,13 +71,17 @@
 
 /* カエル画像そのものの設定 */
 .frog-icon {
-    width: 75px; /* カエルの大きさ（お好みで調整） */
+    width: 75px;
     height: auto;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); /* 軽く影をつけて浮かせる */
+    /* 影(filter)を一旦削除して干渉を防ぐ */
     pointer-events: none;
-    mix-blend-mode: multiply; 
-    pointer-events: none;
+    /* 白背景を透過させる設定（ここを強化） */
+    mix-blend-mode: multiply !important; 
+    isolation: isolate; /* 他の要素との干渉を防ぐ */
 }
+
+/* もし背景が黒っぽい画像だった場合はこちらを試してください */
+/* .frog-icon { mix-blend-mode: screen !important; } */
     </style>
 </head>
 <body>
