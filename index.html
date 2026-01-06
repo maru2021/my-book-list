@@ -52,28 +52,21 @@
         }
 
        /* カエルバッジの箱：位置を赤丸の右隣に固定 */
+/* カエルバッジの箱：赤丸の右隣に置くだけ */
 .mega-recommend-badge {
     position: absolute !important;
-    top: -25px !important;
-    left: 45px !important; /* 赤丸（left: -15px）の右に来る数値 */
+    top: -30px !important;
+    left: 45px !important; 
     z-index: 110 !important;
-    width: 80px !important;
-    height: 80px !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    background: none !important; /* 箱自体の背景を殺す */
 }
 
-/* カエル画像：白背景を強制的に透明化する */
+/* カエル画像：特殊な加工をすべて削除 */
 .frog-icon {
-    width: 100% !important;
+    width: 75px !important;
     height: auto !important;
     display: block !important;
-    /* 強力なコントラストで白を「純白」に飛ばし、multiplyで消し去る */
-    filter: contrast(2) brightness(1.1) !important;
-    mix-blend-mode: multiply !important;
-    pointer-events: none;
+    pointer-events: none !important;
+    /* 特殊なフィルターなどは一切不要になります */
 }
     </style>
 </head>
