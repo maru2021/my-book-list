@@ -11,69 +11,72 @@
         .site-header h1 { margin: 0; font-size: 26px; color: #222; }
         .site-header p { color: #666; margin-top: 8px; font-size: 15px; }
         .ad-disclosure { font-size: 11px; color: #aaa; margin-top: 15px; font-style: italic; }
+
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
         .tab-btn { padding: 10px 20px; cursor: pointer; border: none; background: #ddd; border-radius: 20px; font-weight: bold; transition: 0.3s; font-size: 14px; }
         .tab-btn.active { background: #ff9900; color: white; }
+
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; padding-bottom: 50px; }
-        .card { background: white; border-radius: 12px; position: relative !important; overflow: visible !important; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; padding: 20px; transition: transform 0.2s; }
+        .card { background: white !important; border-radius: 12px; position: relative !important; overflow: visible !important; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; padding: 20px; transition: transform 0.2s; }
         .card:hover { transform: translateY(-5px); }
+        
         .post-date { position: absolute; top: 10px; right: 15px; font-size: 10px; color: #bbb; }
         .card img { width: 100%; height: 180px; object-fit: contain; background: #f9f9f9; margin-bottom: 15px; }
         .card h3 { font-size: 16px; margin: 5px 0 5px 0; min-height: 2.8em; line-height: 1.4; color: #111; }
+        
         .rating { font-size: 16px; color: #ffc107; margin-bottom: 8px; }
         .badge { color: #c40000; font-weight: bold; font-size: 12px; margin-bottom: 12px; display: block; }
         .comment { font-size: 14px; color: #555; text-align: left; line-height: 1.6; margin-bottom: 20px; flex-grow: 1; white-space: pre-wrap; }
+        
         .btn { background: #ff9900; color: white; text-decoration: none; padding: 12px; border-radius: 6px; font-weight: bold; transition: 0.2s; text-align: center; font-size: 14px; }
         .btn:hover { background: #e68a00; }
+
         @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
 
-        /* 赤丸バッジ */
+        /* --- 赤丸（サクッと読める）の設定 --- */
         .quick-read-badge {
             position: absolute !important;
-            top: -15px !important;
-            left: -15px !important;
-            width: 62px;
-            height: 62px;
-            background: radial-gradient(#ff6b6b, #ee5253) !important;
+            top: -10px !important;
+            left: -10px !important;
+            width: 60px !important;
+            height: 60px !important;
+            background: #ff4d4d !important;
             color: white !important;
             border-radius: 50% !important;
             display: flex !important;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 900;
-            text-align: center;
-            z-index: 100;
-            box-shadow: 3px 3px 8px rgba(0,0,0,0.2);
-            transform: rotate(-15deg);
-            border: 2px solid white;
-            pointer-events: none;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 10px !important;
+            font-weight: bold !important;
+            z-index: 100 !important;
+            line-height: 1.2 !important;
+            text-align: center !important;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2) !important;
         }
 
-        /* カエルバッジ全体の箱（赤丸の右隣） */
+        /* --- カエル（frog.png）の親要素：赤丸の右側に絶対配置 --- */
         .mega-recommend-badge {
             position: absolute !important;
-            top: -35px !important; /* 位置を少し上に */
-            left: 42px !important; /* 赤丸の右側へ */
+            top: -30px !important; /* 赤丸より少し上 */
+            left: 45px !important;  /* 赤丸(60px)の横に並ぶよう調整 */
             width: 80px !important;
             height: 80px !important;
-            z-index: 90;
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
+            z-index: 110 !important;
+            background: transparent !important;
+            display: block !important;
         }
 
-       .frog-icon {
-    width: 100% !important;
-    height: auto !important;
-    /* ↓ 白背景を完全に飛ばすための設定セット */
-    filter: contrast(1.5) brightness(1.2); /* 白を真っ白に飛ばしてコントラストを上げる */
-    mix-blend-mode: multiply; /* これで真っ白になった部分が完全に消える */
-    /* ---------------------------------- */
-    display: block !important;
-    pointer-events: none;
-}
+        /* --- カエル画像：白背景をCSSで無理やり透明化 --- */
+        .frog-icon {
+            width: 80px !important;
+            height: 80px !important;
+            object-fit: contain !important;
+            /* 強制的に白を飛ばす設定 */
+            filter: contrast(3) brightness(1.2) !important;
+            mix-blend-mode: multiply !important;
+            pointer-events: none !important;
+        }
     </style>
 </head>
 <body>
@@ -84,77 +87,68 @@
         <div class="ad-disclosure">※本サイトはAmazonアソシエイト・プログラムに参加しています</div>
     </header>
     <div class="container">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab(true, this)">Kindle Unlimited 0円</button>
-            <button class="tab-btn" onclick="switchTab(false, this)">対象外だけど良書！</button>
-        </div>
         <div id="book-grid" class="grid"></div>
     </div>
+
     <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5ymaarqn9uS9u-UwrEYrQupWrgQdYG13Iqom8ZvKMzkITaXo3GvDPReNPBe2yCfOyho7iw3jb3NIZ/pub?gid=0&single=true&output=csv';
         let allBooks = [];
+
         function getStars(rating) {
             if (!rating) return ''; 
             let stars = '';
             const fullStars = Math.floor(rating);
-            const hasHalfStar = rating % 1 !== 0;
             for (let i = 1; i <= 5; i++) {
-                if (i <= fullStars) { stars += '&#9733;'; }
-                else if (hasHalfStar && i === fullStars + 1) {
-                    stars += '<span style="position:relative;display:inline-block;">&#9734;<span style="position:absolute;left:0;top:0;width:50%;overflow:hidden;color:#ffc107;">&#9733;</span></span>';
-                } else { stars += '&#9734;'; }
+                stars += (i <= fullStars) ? '&#9733;' : '&#9734;';
             }
-            return `<div class="rating">${stars} <span style="font-size:12px; color:#999; font-weight:normal;">(${rating})</span></div>`;
+            return `<div class="rating">${stars}</div>`;
         }
-        function switchTab(showUnlimited, btnElement) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-            renderBooks(showUnlimited);
-        }
+
         async function loadBooks() {
             try {
                 const response = await fetch(csvUrl);
                 const data = await response.text();
                 allBooks = data.replace(/\r/g, '').split('\n').filter(row => row.trim() !== '').slice(1).reverse();
-                renderBooks(true);
+                renderBooks();
             } catch (e) { console.error("読み込みエラー", e); }
         }
-        function renderBooks(targetStatus) {
+
+        function renderBooks() {
             const grid = document.getElementById('book-grid');
             grid.innerHTML = '';
             allBooks.forEach(row => {
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                const rawTitleWithTags = (cols[0] || "").replace(/"/g, "").trim();
-                if (!rawTitleWithTags || rawTitleWithTags === "title") return; 
-                let checkVal = cols[6] ? cols[6].replace(/"/g, "").trim().toUpperCase() : "FALSE";
-                const isUnlimited = (checkVal === "TRUE");
-                if (isUnlimited === targetStatus) {
-                    const imageUrl = (cols[1] || "").replace(/"/g, "").trim();
-                    const amazonUrl = (cols[2] || "").replace(/"/g, "").trim();
-                    const comment = (cols[3] || "").replace(/"/g, "").trim();
-                    const date = (cols[4] || "").replace(/"/g, "").trim() || "未設定";
-                    const rating = parseFloat(cols[5]) || 0; 
-                    const badgeHtml = isUnlimited ? '<span class="badge">Kindle Unlimited 0円</span>' : '';
-                    let displayTitle = '';
-                    if (rawTitleWithTags.includes('<div') || rawTitleWithTags.includes('<img')) {
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = rawTitleWithTags;
-                        const badges = Array.from(tempDiv.querySelectorAll('.quick-read-badge, .mega-recommend-badge')).map(el => el.outerHTML).join('');
-                        const cleanTitleText = tempDiv.textContent || tempDiv.innerText;
-                        displayTitle = `${badges}<h3>${cleanTitleText}</h3>`;
-                    } else { displayTitle = `<h3>${rawTitleWithTags}</h3>`; }
-                    grid.innerHTML += `
-                        <div class="card">
-                            <div class="post-date">最終確認：${date}</div>
-                            <img src="${imageUrl}" alt="">
-                            ${displayTitle}
-                            ${getStars(rating)} 
-                            ${badgeHtml}
-                            <div class="comment">${comment}</div>
-                            <a href="${amazonUrl}" target="_blank" class="btn">Amazonで詳細を見る</a>
-                        </div>
-                    `;
+                const rawTitle = (cols[0] || "").replace(/"/g, "").trim();
+                if (!rawTitle || rawTitle === "title") return;
+
+                const imageUrl = (cols[1] || "").replace(/"/g, "").trim();
+                const amazonUrl = (cols[2] || "").replace(/"/g, "").trim();
+                const comment = (cols[3] || "").replace(/"/g, "").trim();
+                const date = (cols[4] || "").replace(/"/g, "").trim();
+                const rating = parseFloat(cols[5]) || 0;
+
+                // タイトル内のバッジタグとテキストを分離
+                let displayTitle = '';
+                if (rawTitle.includes('<div')) {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = rawTitle;
+                    const badges = Array.from(temp.querySelectorAll('div')).map(d => d.outerHTML).join('');
+                    const text = temp.innerText || temp.textContent;
+                    displayTitle = `${badges}<h3>${text}</h3>`;
+                } else {
+                    displayTitle = `<h3>${rawTitle}</h3>`;
                 }
+
+                grid.innerHTML += `
+                    <div class="card">
+                        <div class="post-date">最終確認：${date}</div>
+                        <img src="${imageUrl}" alt="">
+                        ${displayTitle}
+                        ${getStars(rating)}
+                        <div class="comment">${comment}</div>
+                        <a href="${amazonUrl}" target="_blank" class="btn">Amazonで詳細を見る</a>
+                    </div>
+                `;
             });
         }
         loadBooks();
