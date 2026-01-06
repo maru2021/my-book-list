@@ -51,27 +51,28 @@
             pointer-events: none;
         }
 
-        /* カエルバッジ全体の箱（赤丸の右隣） */
-        .mega-recommend-badge {
-            position: absolute !important;
-            top: -35px !important; /* 位置を少し上に */
-            left: 42px !important; /* 赤丸の右側へ */
-            width: 80px !important;
-            height: 80px !important;
-            z-index: 90;
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-        }
+       /* カエルバッジの箱：位置を赤丸の右隣に固定 */
+.mega-recommend-badge {
+    position: absolute !important;
+    top: -25px !important;
+    left: 45px !important; /* 赤丸（left: -15px）の右に来る数値 */
+    z-index: 110 !important;
+    width: 80px !important;
+    height: 80px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: none !important; /* 箱自体の背景を殺す */
+}
 
-       .frog-icon {
+/* カエル画像：白背景を強制的に透明化する */
+.frog-icon {
     width: 100% !important;
     height: auto !important;
-    /* ↓ 白背景を完全に飛ばすための設定セット */
-    filter: contrast(1.5) brightness(1.2); /* 白を真っ白に飛ばしてコントラストを上げる */
-    mix-blend-mode: multiply; /* これで真っ白になった部分が完全に消える */
-    /* ---------------------------------- */
     display: block !important;
+    /* 強力なコントラストで白を「純白」に飛ばし、multiplyで消し去る */
+    filter: contrast(2) brightness(1.1) !important;
+    mix-blend-mode: multiply !important;
     pointer-events: none;
 }
     </style>
