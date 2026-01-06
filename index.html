@@ -64,15 +64,16 @@
             justify-content: center;
         }
 
-        /* カエル画像（白抜きを強力に行う設定） */
-        .frog-icon {
-            width: 100% !important;
-            height: auto !important;
-            /* multiplyが効かない汚れを飛ばすため、コントラストを上げてから透過させる */
-            filter: contrast(1.1) brightness(1.1); 
-            mix-blend-mode: multiply;
-            pointer-events: none;
-        }
+       .frog-icon {
+    width: 100% !important;
+    height: auto !important;
+    /* ↓ 白背景を完全に飛ばすための設定セット */
+    filter: contrast(1.5) brightness(1.2); /* 白を真っ白に飛ばしてコントラストを上げる */
+    mix-blend-mode: multiply; /* これで真っ白になった部分が完全に消える */
+    /* ---------------------------------- */
+    display: block !important;
+    pointer-events: none;
+}
     </style>
 </head>
 <body>
