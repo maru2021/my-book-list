@@ -70,8 +70,8 @@
             height: auto !important;
             /* multiplyが効かない汚れを飛ばすため、コントラストを上げてから透過させる */
             filter: contrast(1.1) brightness(1.1); 
-            mix-blend-mode: multiply;
-            pointer-events: none;
+           mix-blend-mode: normal; /* ← 明示 */
+    background: transparent;
         }
     </style>
 </head>
