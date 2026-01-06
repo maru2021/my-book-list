@@ -68,14 +68,14 @@
             z-index: 90;
         }
 
-        /* カエル画像（frog.png用） */
-        .frog-icon {
-            width: 75px;
-            height: auto;
-            mix-blend-mode: multiply; /* 白背景を透明化 */
-            pointer-events: none;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
-        }
+      /* index.htmlのstyleタグ内、.frog-iconを上書き */
+.frog-icon {
+    width: 75px !important; /* 幅を固定 */
+    height: auto !important; /* 高さを自動にして比率を維持 */
+    display: block !important;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
     </style>
 </head>
 <body>
