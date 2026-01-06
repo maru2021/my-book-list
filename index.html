@@ -14,7 +14,6 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-        /* タブ切り替えのスタイル */
         .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
         .tab-btn { padding: 10px 20px; cursor: pointer; border: none; background: #ddd; border-radius: 20px; font-weight: bold; transition: 0.3s; font-size: 14px; }
         .tab-btn.active { background: #ff9900; color: white; }
@@ -37,51 +36,46 @@
 
         @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
 
-      /* 【赤丸】位置は変えず、少しだけサイズ調整してスッキリさせる */
-.quick-read-badge {
-    position: absolute !important;
-    top: -15px !important;
-    left: -15px !important; /* 左上にはみ出したまま */
-    width: 62px;
-    height: 62px;
-    background: radial-gradient(#ff6b6b, #ee5253) !important;
-    color: white !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 900;
-    text-align: center;
-    line-height: 1.2;
-    z-index: 100;
-    box-shadow: 3px 3px 8px rgba(0,0,0,0.2);
-    transform: rotate(-15deg);
-    border: 2px solid white;
-    pointer-events: none;
-}
+        /* 赤丸バッジ */
+        .quick-read-badge {
+            position: absolute !important;
+            top: -15px !important;
+            left: -15px !important;
+            width: 62px;
+            height: 62px;
+            background: radial-gradient(#ff6b6b, #ee5253) !important;
+            color: white !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.2;
+            z-index: 100;
+            box-shadow: 3px 3px 8px rgba(0,0,0,0.2);
+            transform: rotate(-15deg);
+            border: 2px solid white;
+            pointer-events: none;
+        }
 
-/* カエルバッジ全体の箱（赤丸の右に来るように調整） */
-.mega-recommend-badge {
-    position: absolute !important;
-    top: -30px; /* 少し上にはみ出させる */
-    left: 40px; /* 赤丸（I列）の右側に配置 */
-    z-index: 20;
-}
+        /* カエルバッジの親要素（赤丸の右隣に配置） */
+        .mega-recommend-badge {
+            position: absolute !important;
+            top: -30px;
+            left: 40px;
+            z-index: 90;
+        }
 
-/* カエル画像そのものの設定 */
-.frog-icon {
-    width: 75px;
-    height: auto;
-    /* 影(filter)を一旦削除して干渉を防ぐ */
-    pointer-events: none;
-    /* 白背景を透過させる設定（ここを強化） */
-    mix-blend-mode: multiply !important; 
-    isolation: isolate; /* 他の要素との干渉を防ぐ */
-}
-
-/* もし背景が黒っぽい画像だった場合はこちらを試してください */
-/* .frog-icon { mix-blend-mode: screen !important; } */
+        /* カエル画像（frog.png用） */
+        .frog-icon {
+            width: 75px;
+            height: auto;
+            mix-blend-mode: multiply; /* 白背景を透明化 */
+            pointer-events: none;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+        }
     </style>
 </head>
 <body>
@@ -146,8 +140,8 @@
 
             allBooks.forEach(row => {
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                const rawTitle = (cols[0] || "").replace(/"/g, "").trim();
-                if (!rawTitle || rawTitle === "title") return; 
+                const rawTitleWithTags = (cols[0] || "").replace(/"/g, "").trim();
+                if (!rawTitleWithTags || rawTitleWithTags === "title") return; 
 
                 let checkVal = cols[6] ? cols[6].replace(/"/g, "").trim().toUpperCase() : "FALSE";
                 const isUnlimited = (checkVal === "TRUE");
@@ -160,16 +154,17 @@
                     const rating = parseFloat(cols[5]) || 0; 
                     const badgeHtml = isUnlimited ? '<span class="badge">Kindle Unlimited 0円</span>' : '';
 
-                    // A列にタグが含まれている場合はそのまま出し、タグを除いた部分はh3で囲む
-                    // タイトル処理の部分をこれに差し替え
-let displayTitle = `<h3>${rawTitle}</h3>`;
-// 赤丸バッジと金丸バッジの両方をHTMLとしてそのまま通す
-if (rawTitle.includes('badge')) {
-    displayTitle = rawTitle.replace(/<\/div>/g, '</div>###').split('###');
-    let badges = displayTitle.filter(t => t.includes('badge')).join('');
-    let cleanTitle = displayTitle.filter(t => !t.includes('badge')).join('').replace(/<\/?[^>]+(>|$)/g, "");
-    displayTitle = `${badges}<h3>${cleanTitle}</h3>`;
-}
+                    // A列のHTMLタグ（バッジ）と純粋なタイトルを分離して組み立て
+                    let displayTitle = '';
+                    if (rawTitleWithTags.includes('<div') || rawTitleWithTags.includes('<img')) {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = rawTitleWithTags;
+                        const badges = Array.from(tempDiv.querySelectorAll('.quick-read-badge, .mega-recommend-badge')).map(el => el.outerHTML).join('');
+                        const cleanTitleText = tempDiv.textContent || tempDiv.innerText;
+                        displayTitle = `${badges}<h3>${cleanTitleText}</h3>`;
+                    } else {
+                        displayTitle = `<h3>${rawTitleWithTags}</h3>`;
+                    }
 
                     grid.innerHTML += `
                         <div class="card">
